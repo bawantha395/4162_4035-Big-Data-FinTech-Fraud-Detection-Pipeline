@@ -48,8 +48,22 @@ echo "[kafka] Creating topics …"
 python -m src.producer.kafka_setup
 
 # ── 4. Spark detector (background) ───────────────────────────────────────
+# Ensure Spark checkpoint directory is local when running on a developer machine
+if [ -z "${SPARK_CHECKPOINT_DIR:-}" ]; then
+  export SPARK_CHECKPOINT_DIR="/tmp/bs_checkpoints"
+  echo "[config] SPARK_CHECKPOINT_DIR not set; using ${SPARK_CHECKPOINT_DIR}"
+fi
+
 echo "[spark] Starting fraud detector in background …"
-python -m src.detector.stream_detector &
+spark-submit \
+  --master local[*] \
+  --driver-memory 2g \
+  --executor-memory 2g \
+  --conf spark.sql.shuffle.partitions=4 \
+  --conf "spark.sql.streaming.checkpointLocation=$SPARK_CHECKPOINT_DIR" \
+  --packages "org.apache.spark:spark-sql-kafka-0-10_2.13:4.1.1,org.postgresql:postgresql:42.7.1" \
+  --repositories "https://repo1.maven.org/maven2/" \
+  src/detector/stream_detector.py &
 SPARK_PID=$!
 echo "[spark] PID: $SPARK_PID"
 sleep 8   # allow Spark to connect to Kafka

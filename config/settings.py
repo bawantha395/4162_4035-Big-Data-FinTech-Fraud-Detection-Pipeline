@@ -29,7 +29,16 @@ SPARK_MASTER         = os.getenv("SPARK_MASTER", "local[*]")
 SPARK_DRIVER_MEM     = os.getenv("SPARK_DRIVER_MEM",   "2g")
 SPARK_EXECUTOR_MEM   = os.getenv("SPARK_EXECUTOR_MEM", "2g")
 SPARK_SHUFFLE_PARTS  = int(os.getenv("SPARK_SHUFFLE_PARTS", "4"))
-SPARK_CHECKPOINT_DIR = os.getenv("SPARK_CHECKPOINT_DIR", "/tmp/bs_checkpoints")
+def _checkpoint_path(raw_path: str) -> str:
+    if "://" in raw_path:
+        return raw_path
+    # Force local FS even when Hadoop default FS is HDFS.
+    return f"file:{raw_path}"
+
+
+SPARK_CHECKPOINT_DIR = _checkpoint_path(
+    os.getenv("SPARK_CHECKPOINT_DIR", "/tmp/bs_checkpoints")
+)
 
 # ── Warehouse (Parquet) ───────────────────────────────────────────────────────
 WAREHOUSE_PATH = os.getenv("WAREHOUSE_PATH", "./warehouse/validated")
