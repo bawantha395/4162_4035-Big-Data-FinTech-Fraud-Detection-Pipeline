@@ -23,8 +23,8 @@ echo "========================================================"
 
 # ── Docker-aware defaults ────────────────────────────────────────────────
 if [ -z "${KAFKA_BOOTSTRAP:-}" ]; then
-  if docker compose -f docker/docker-compose.yml ps --services --filter "status=running" 2>/dev/null | grep -q "^kafka$"; then
-    export KAFKA_BOOTSTRAP="localhost:9093"
+  if docker compose -f docker/docker-compose.yaml ps --services --filter "status=running" 2>/dev/null | grep -q "^kafka$"; then
+    export KAFKA_BOOTSTRAP="localhost:9092"
     echo "[config] KAFKA_BOOTSTRAP not set; using ${KAFKA_BOOTSTRAP} for host access"
   fi
 fi
@@ -39,7 +39,7 @@ pip install -q -r requirements.txt
 
 # ── 2. Docker services ────────────────────────────────────────────────────
 echo "[docker] Starting Kafka + PostgreSQL …"
-docker compose -f docker/docker-compose.yml up -d
+docker compose -f docker/docker-compose.yaml up -d
 echo "[docker] Waiting 15 s for services to be ready …"
 sleep 15
 
