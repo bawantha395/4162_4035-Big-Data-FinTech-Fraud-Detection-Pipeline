@@ -135,6 +135,7 @@ pytest tests/ -v
 | `KAFKA_TOPIC_TXN` | `bank_transactions` | Transaction topic |
 | `KAFKA_TOPIC_ALERTS` | `security_alerts` | Alert topic |
 | `PG_HOST` | `localhost` | PostgreSQL host |
+| `PG_PORT` | `5433` | PostgreSQL host port |
 | `PG_DB` | `banksecure_db` | Database name |
 | `PG_USER` | `bs_user` | DB username |
 | `PG_PASSWORD` | `bs_pass` | DB password |

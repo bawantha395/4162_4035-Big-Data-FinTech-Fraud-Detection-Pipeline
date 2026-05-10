@@ -17,7 +17,7 @@ KAFKA_REPLICATION  = int(os.getenv("KAFKA_REPLICATION",  "1"))
 
 # ── PostgreSQL ────────────────────────────────────────────────────────────────
 PG_HOST     = os.getenv("PG_HOST",     "localhost")
-PG_PORT     = int(os.getenv("PG_PORT", "5432"))
+PG_PORT     = int(os.getenv("PG_PORT", "5433"))
 PG_DB       = os.getenv("PG_DB",       "banksecure_db")
 PG_USER     = os.getenv("PG_USER",     "bs_user")
 PG_PASSWORD = os.getenv("PG_PASSWORD", "bs_pass")
